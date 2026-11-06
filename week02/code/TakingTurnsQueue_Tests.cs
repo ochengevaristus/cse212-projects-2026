@@ -1,17 +1,19 @@
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 // TODO Problem 1 - Run test cases and record any defects the test code finds in the comment above the test method.
-// DO NOT MODIFY THE CODE IN THE TESTS in this file, just the comments above the tests. 
-// Fix the code being tested to match requirements and make all tests pass. 
+// DO NOT MODIFY THE CODE IN THE TESTS in this file, just the comments.
+// Fix the code being tested to match requirements and make all tests pass.
 
 [TestClass]
 public class TakingTurnsQueueTests
 {
     [TestMethod]
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
-    // run until the queue is empty
-    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // run until the queue is empty.
+    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim.
+    // Defect(s) Found: People were returned in the wrong order because PersonQueue.Enqueue()
+    // inserted new people at the front instead of the back of the queue.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -40,10 +42,11 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
-    // After running 5 times, add George with 3 turns.  Run until the queue is empty.
-    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-    // Defect(s) Found: 
+    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3).
+    // After running 5 times, add George with 3 turns. Run until the queue is empty.
+    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George.
+    // Defect(s) Found: The queue returned people in the wrong order because PersonQueue.Enqueue()
+    // inserted new people at the front instead of the back of the queue.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -82,10 +85,11 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3)
+    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3).
     // Run 10 times.
-    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim.
+    // Defect(s) Found: A person with zero turns was not added back to the queue,
+    // even though zero represents unlimited turns.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -113,10 +117,11 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
+    // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3).
     // Run 10 times.
-    // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-    // Defect(s) Found: 
+    // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim.
+    // Defect(s) Found: A person with negative turns was not added back to the queue,
+    // even though negative turns represent unlimited turns.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -141,9 +146,10 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Try to get the next person from an empty queue
-    // Expected Result: Exception should be thrown with appropriate error message.
-    // Defect(s) Found: 
+    // Scenario: Try to get the next person from an empty queue.
+    // Expected Result: Exception should be thrown with the appropriate error message.
+    // Defect(s) Found: No defect found. The queue correctly threw an InvalidOperationException
+    // with the expected message: "No one in the queue."
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
