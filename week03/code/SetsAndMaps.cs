@@ -3,27 +3,35 @@ using System.Text.Json;
 
 public static class SetsAndMaps
 {
-
-public static string[] FindPairs(string[] words)
-{
-    var wordSet = new HashSet<string>(words);
-    var pairs = new HashSet<string>();
-
-    foreach (string word in words)
+    public static string[] FindPairs(string[] words)
     {
-        string reverse = new string(word.Reverse().ToArray());
+        var unmatchedWords = new HashSet<string>(words);
+        var pairs = new List<string>();
 
-        if (word != reverse &&
-            string.CompareOrdinal(word, reverse) < 0 &&
-            wordSet.Contains(reverse))
+        foreach (string word in words)
         {
-            pairs.Add($"{word}&{reverse}");
+            // Skip words that have already been processed.
+            if (!unmatchedWords.Remove(word))
+                continue;
+
+            // Reverse the word.
+            char[] characters = word.ToCharArray();
+            Array.Reverse(characters);
+            string reverse = new string(characters);
+
+            // Find and remove the matching reverse word.
+            if (word != reverse && unmatchedWords.Remove(reverse))
+            {
+                // Keep the expected alphabetical pair format.
+                if (string.CompareOrdinal(word, reverse) < 0)
+                    pairs.Add($"{word}&{reverse}");
+                else
+                    pairs.Add($"{reverse}&{word}");
+            }
         }
+
+        return pairs.ToArray();
     }
-
-    return pairs.ToArray();
-}
-
 
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
